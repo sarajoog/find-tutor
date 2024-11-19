@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { LayoutService } from '../../services/layout.service';
 
 @Component({
@@ -12,8 +12,17 @@ import { LayoutService } from '../../services/layout.service';
 })
 export class NavbarComponent {
   private layoutService = inject(LayoutService);
+  private router = inject(Router);
 
   toggleSidebar() {
     this.layoutService.toggleSidebar();
+  }
+
+  navigateToSignIn() {
+    this.router.navigate(['/sign-in']);
+  }
+
+  navigateToRegister() {
+    this.router.navigate(['/register']);
   }
 } 

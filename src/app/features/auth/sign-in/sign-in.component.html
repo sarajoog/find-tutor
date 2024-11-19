@@ -1,0 +1,74 @@
+<div class="sign-in-container">
+  <div class="sign-in-card">
+    <h2>Sign In</h2>
+    <p class="subtitle">Welcome back! Please sign in to your account.</p>
+
+    <form [formGroup]="signInForm" (ngSubmit)="onSubmit()" class="sign-in-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email" 
+          placeholder="Enter your email"
+          [class.error]="signInForm.get('email')?.invalid && signInForm.get('email')?.touched"
+        >
+        @if (signInForm.get('email')?.invalid && signInForm.get('email')?.touched) {
+          <div class="error-message">
+            @if (signInForm.get('email')?.errors?.['required']) {
+              <span>Email is required</span>
+            } @else if (signInForm.get('email')?.errors?.['email']) {
+              <span>Please enter a valid email</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          formControlName="password" 
+          placeholder="Enter your password"
+          [class.error]="signInForm.get('password')?.invalid && signInForm.get('password')?.touched"
+        >
+        @if (signInForm.get('password')?.invalid && signInForm.get('password')?.touched) {
+          <div class="error-message">
+            @if (signInForm.get('password')?.errors?.['required']) {
+              <span>Password is required</span>
+            } @else if (signInForm.get('password')?.errors?.['minlength']) {
+              <span>Password must be at least 6 characters</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group checkbox">
+        <label>
+          <input type="checkbox" formControlName="rememberMe">
+          Remember me
+        </label>
+        <a routerLink="/forgot-password" class="forgot-password">Forgot Password?</a>
+      </div>
+
+      <button 
+        type="submit" 
+        class="submit-btn" 
+        [disabled]="signInForm.invalid || isSubmitting"
+      >
+        @if (isSubmitting) {
+          <i class="fas fa-spinner fa-spin"></i>
+          Signing in...
+        } @else {
+          Sign In
+        }
+      </button>
+    </form>
+
+    <div class="sign-up-prompt">
+      <span>Don't have an account?</span>
+      <a routerLink="/register">Sign Up</a>
+    </div>
+  </div>
+</div> 
