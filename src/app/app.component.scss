@@ -1,0 +1,23 @@
+.app-container {
+  min-height: 100vh;
+  background: #f5f6fa;
+}
+
+.main-content {
+  padding: 4.5rem 2rem 2rem;
+  transition: margin-left 0.3s ease;
+}
+
+.app-container.sidebar-open .main-content {
+  margin-left: 280px;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 4rem 1rem 1rem;
+  }
+  
+  .app-container.sidebar-open .main-content {
+    margin-left: 240px;
+  }
+}

@@ -1,0 +1,15 @@
+<aside class="sidebar" [class.open]="isSidebarOpen()">
+  <div class="sidebar-content">
+    <div class="sidebar-header">
+      <h2>Menu</h2>
+    </div>
+    <nav class="sidebar-nav">
+      @for (item of menuItems(); track item.title) {
+        <a [routerLink]="item.link" class="nav-item">
+          <i [class]="item.icon"></i>
+          <span>{{ item.title }}</span>
+        </a>
+      }
+    </nav>
+  </div>
+</aside> 
