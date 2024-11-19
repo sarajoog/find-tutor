@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { LoggerService } from '../../../core/services/logger.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -15,7 +16,11 @@ export class SignInComponent implements OnInit {
   isSubmitting = false;
   private readonly REMEMBERED_EMAIL_KEY = 'rememberedEmail';
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder, 
+    private router: Router,
+    private logger: LoggerService
+  ) {
     this.signInForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -24,9 +29,10 @@ export class SignInComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Check for remembered email on component initialization
+    this.logger.debug('SignInComponent initialized');
     const rememberedEmail = localStorage.getItem(this.REMEMBERED_EMAIL_KEY);
     if (rememberedEmail) {
+      this.logger.info('Found remembered email', { email: rememberedEmail });
       this.signInForm.patchValue({
         email: rememberedEmail,
         rememberMe: true
@@ -57,21 +63,24 @@ export class SignInComponent implements OnInit {
     if (this.signInForm.valid) {
       this.isSubmitting = true;
       const { email, rememberMe } = this.signInForm.value;
+      this.logger.info('Sign-in attempt', { email });
 
-      // Handle remember me
       if (rememberMe) {
         localStorage.setItem(this.REMEMBERED_EMAIL_KEY, email);
+        this.logger.debug('Email remembered', { email });
       } else {
         localStorage.removeItem(this.REMEMBERED_EMAIL_KEY);
+        this.logger.debug('Email forgotten');
       }
 
       // Simulate API call
-      console.log('Form submitted:', this.signInForm.value);
       setTimeout(() => {
         this.isSubmitting = false;
+        this.logger.info('Sign-in successful', { email });
         this.router.navigate(['/dashboard']);
       }, 1500);
     } else {
+      this.logger.warn('Invalid form submission', this.signInForm.errors);
       Object.keys(this.signInForm.controls).forEach(key => {
         const control = this.signInForm.get(key);
         if (control?.invalid) {
