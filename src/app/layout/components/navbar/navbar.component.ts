@@ -19,10 +19,10 @@ export class NavbarComponent {
   }
 
   navigateToSignIn() {
-    this.router.navigate(['/sign-in']);
+    this.router.navigate(['/auth/sign-in']);
   }
 
   navigateToRegister() {
-    this.router.navigate(['/register']);
+    this.router.navigate(['/auth/register']);
   }
 } 
