@@ -25,4 +25,8 @@ export class NavbarComponent {
   navigateToRegister() {
     this.router.navigate(['/auth/register']);
   }
+
+  navigateToContact() {
+    this.router.navigate(['/pages/contact']);
+  } 
 } 

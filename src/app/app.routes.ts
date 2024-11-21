@@ -10,9 +10,14 @@ export const routes: Routes = [
           import('@features/auth/auth.routes').then(m => m.AUTH_ROUTES)
       },
       {
-        path: 'dashboard',
+        path: 'account/dashboard',
         loadComponent: () => 
           import('@features/account/dashboard/dashboard.component').then(m => m.DashboardComponent)
+      },
+      {
+        path: 'pages/contact',
+        loadComponent: () => 
+          import('./pages/contact/contact.component').then(m => m.ContactComponent)
       }
     ]
   }
