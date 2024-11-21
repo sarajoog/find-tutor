@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { LoggerService } from '../../../core/services/logger.service';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -12,6 +13,8 @@ import { LoggerService } from '../../../core/services/logger.service';
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent implements OnInit {
+  
+  private authService = inject(AuthService);
   signInForm: FormGroup;
   isSubmitting = false;
   private readonly REMEMBERED_EMAIL_KEY = 'rememberedEmail';
@@ -59,10 +62,10 @@ export class SignInComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     if (this.signInForm.valid) {
       this.isSubmitting = true;
-      const { email, rememberMe } = this.signInForm.value;
+      const { email, password, rememberMe } = this.signInForm.value;
       this.logger.info('Sign-in attempt', { email });
 
       if (rememberMe) {
@@ -74,11 +77,22 @@ export class SignInComponent implements OnInit {
       }
 
       // Simulate API call
+      try {
+        await this.authService.signIn(email, password);
+        this.isSubmitting = false;
+        this.logger.info('Sign-in successful', { email });
+        this.router.navigate(['/account/dashboard']);
+      } catch (error) {
+        this.isSubmitting = false;
+        this.logger.error('Sign-in failed', { email });
+      }
+      /*
       setTimeout(() => {
         this.isSubmitting = false;
         this.logger.info('Sign-in successful', { email });
         this.router.navigate(['/dashboard']);
       }, 1500);
+      */
     } else {
       this.logger.warn('Invalid form submission', this.signInForm.errors);
       Object.keys(this.signInForm.controls).forEach(key => {
