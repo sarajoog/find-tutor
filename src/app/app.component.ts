@@ -1,19 +1,31 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './layout/components/navbar/navbar.component';
-import { SidebarComponent } from './layout/components/sidebar/sidebar.component';
-import { FooterComponent } from './layout/components/footer/footer.component';
-import { LayoutService } from './layout/services/layout.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavbarComponent, SidebarComponent, FooterComponent],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  imports: [RouterOutlet, NavbarComponent],
+  template: `
+    <div class="app-container">
+      <app-navbar></app-navbar>
+      <main class="main-content">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  `,
+  styles: [`
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .main-content {
+      margin-top: 64px; // Height of navbar
+      padding: 24px;
+      flex: 1;
+    }
+  `]
 })
-export class AppComponent {
-  private layoutService = inject(LayoutService);
-  readonly isSidebarOpen = this.layoutService.isSidebarOpen;
-}
+export class AppComponent {}
