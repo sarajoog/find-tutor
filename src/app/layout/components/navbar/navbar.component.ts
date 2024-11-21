@@ -28,5 +28,9 @@ export class NavbarComponent {
 
   navigateToContact() {
     this.router.navigate(['/pages/contact']);
-  } 
+  }
+
+  navigateToAbout(): void {
+    this.router.navigate(['/pages/about']);
+  }
 } 

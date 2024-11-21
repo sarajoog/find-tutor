@@ -18,6 +18,11 @@ export const routes: Routes = [
         path: 'pages/contact',
         loadComponent: () => 
           import('./pages/contact/contact.component').then(m => m.ContactComponent)
+      },
+      {
+        path: 'pages/about',
+        loadComponent: () => 
+          import('./pages/about/about.component').then(m => m.AboutComponent)
       }
     ]
   }
