@@ -1,4 +1,6 @@
+import { DatePipe } from '@angular/common';
 import { Routes } from '@angular/router';
+import { AuthService } from '@core/services/auth.service';
 
 export const AUTH_ROUTES: Routes = [
     {
@@ -19,6 +21,7 @@ export const AUTH_ROUTES: Routes = [
           loadComponent: () => 
             import('@features/auth/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
         }
-      ]
+      ],
+      providers: [AuthService]
     }
   ];
