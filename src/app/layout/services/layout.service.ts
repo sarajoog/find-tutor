@@ -1,15 +1,13 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject, effect } from '@angular/core';
 import { MenuItem } from '../models/menu.model';
 import { Router } from '@angular/router';
-import { User } from '@angular/fire/auth';
-
-const USER_STORAGE_KEY = 'user';
+import { AuthService } from '../../core/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LayoutService {
-
+  private authService = inject(AuthService);
   private sidebarOpen = signal<boolean>(false);
   private menuItems = signal<MenuItem[]>([
     { title: 'Dashboard', link: '/dashboard', icon: 'fas fa-home' },
@@ -20,22 +18,33 @@ export class LayoutService {
     { title: 'Settings', link: '/settings', icon: 'fas fa-cog' }
   ]);
 
-  #userSignal = signal<User | null>(null);
-  user = this.#userSignal.asReadonly();
-
   readonly isSidebarOpen = this.sidebarOpen.asReadonly();
   readonly getMenuItems = this.menuItems.asReadonly();
 
-  constructor(private router: Router) {}
+  constructor() {
+    // Set sidebar open when user is authenticated
+    effect(() => {
+      if (this.authService.isLoggedIn()) {
+        this.sidebarOpen.set(true);
+      } else {
+        this.sidebarOpen.set(false);
+      }
+    });
+  }
 
   toggleSidebar() {
-    this.sidebarOpen.update(state => !state);
+    if (this.authService.isLoggedIn()) {
+      this.sidebarOpen.update(state => !state);
+    }
   }
 
-  logout() {
-    localStorage.removeItem(USER_STORAGE_KEY);
-    this.#userSignal.set(null);
-    this.router.navigateByUrl('/');
+  closeSidebar() {
+    this.sidebarOpen.set(false);
   }
-  
+
+  openSidebar() {
+    if (this.authService.isLoggedIn()) {
+      this.sidebarOpen.set(true);
+    }
+  }
 } 
