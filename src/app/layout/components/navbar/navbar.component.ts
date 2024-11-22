@@ -1,4 +1,4 @@
-import { Component, inject, effect } from '@angular/core';
+import { Component, inject, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { LayoutService } from '../../services/layout.service';
@@ -18,17 +18,26 @@ export class NavbarComponent {
   
   readonly user = this.authService.user;
   readonly isLoggedIn = this.authService.isLoggedIn;
+  private mobileBreakpoint = 768;
 
   constructor() {
-    // Debug auth state changes
-    effect(() => {
-      console.log('Auth state in navbar:', this.isLoggedIn());
-      console.log('User in navbar:', this.user());
-    });
+    window.addEventListener('resize', this.checkMobileView.bind(this));
+  }
+
+  isMobileView(): boolean {
+    return window.innerWidth <= this.mobileBreakpoint;
+  }
+
+  private checkMobileView() {
+    if (!this.isMobileView() && !this.isLoggedIn()) {
+      this.layoutService.closeSidebar();
+    }
   }
 
   toggleSidebar() {
-    this.layoutService.toggleSidebar();
+    if (this.isMobileView() || this.isLoggedIn()) {
+      this.layoutService.toggleSidebar();
+    }
   }
 
   navigateToSignIn() {
@@ -53,5 +62,9 @@ export class NavbarComponent {
     } catch (error) {
       console.error('Logout error:', error);
     }
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('resize', this.checkMobileView.bind(this));
   }
 } 

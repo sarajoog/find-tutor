@@ -65,7 +65,7 @@ export class AuthService {
             this.#userSignal.set(null);
             this.#user_role.set('');
             localStorage.removeItem(USER_STORAGE_KEY);
-            await this.router.navigateByUrl('/auth/sign-in');
+            await this.router.navigateByUrl('/');
         } catch (error) {
             console.error('Logout error:', error);
         }

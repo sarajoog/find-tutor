@@ -6,6 +6,7 @@ import { AuthService } from '../../core/services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
+
 export class LayoutService {
   private authService = inject(AuthService);
   private sidebarOpen = signal<boolean>(false);
@@ -22,20 +23,25 @@ export class LayoutService {
   readonly getMenuItems = this.menuItems.asReadonly();
 
   constructor() {
-    // Set sidebar open when user is authenticated
     effect(() => {
-      if (this.authService.isLoggedIn()) {
+      if (this.authService.isLoggedIn() && window.innerWidth > 768) {
         this.sidebarOpen.set(true);
       } else {
         this.sidebarOpen.set(false);
       }
     });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth <= 768) {
+        this.sidebarOpen.set(false);
+      } else if (this.authService.isLoggedIn()) {
+        this.sidebarOpen.set(true);
+      }
+    });
   }
 
   toggleSidebar() {
-    if (this.authService.isLoggedIn()) {
-      this.sidebarOpen.update(state => !state);
-    }
+    this.sidebarOpen.update(state => !state);
   }
 
   closeSidebar() {
@@ -43,8 +49,10 @@ export class LayoutService {
   }
 
   openSidebar() {
-    if (this.authService.isLoggedIn()) {
-      this.sidebarOpen.set(true);
-    }
+    this.sidebarOpen.set(true);
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('resize', () => {});
   }
 } 

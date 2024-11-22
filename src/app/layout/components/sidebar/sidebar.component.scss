@@ -1,38 +1,54 @@
 .sidebar {
-  display: flex;
+  display: none;
   flex-direction: column;
   position: fixed;
-  top: 0;
-  left: -280px;
-  height: 100vh;
+  top: 64px;
+  height: calc(100vh - 64px);
   width: 280px;
   background: white;
   color: #2c3e50;
   transition: transform 0.3s ease;
   z-index: 999;
-  padding-top: 4rem;
   box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+  overflow-y: auto;
 
-  &.open {
-    transform: translateX(280px);
+  // Show for authenticated users
+  &.authenticated {
+    display: flex;
+    transform: translateX(-280px);
+    
+    &.open {
+      transform: translateX(0);
+    }
+  }
+
+  // Show for mobile only
+  &.mobile-only {
+    @media (max-width: 768px) {
+      display: flex;
+      transform: translateX(-280px);
+      
+      &.open {
+        transform: translateX(0);
+      }
+    }
   }
 
   .sidebar-content {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    height: 100%;
     padding: 1rem;
   }
 
   .sidebar-header {
-    display: flex;
-    align-items: center;
-    padding: 1rem 0;
+    padding: 0.5rem 0;
+    margin-bottom: 1rem;
     border-bottom: 1px solid rgba(0,0,0,0.1);
     
     h2 {
       margin: 0;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       color: #2c3e50;
       font-weight: 500;
     }
@@ -42,8 +58,18 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    margin-top: 1rem;
-    flex: 1;
+
+    .nav-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      &:not(:last-child) {
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+      }
+    }
   }
 
   .nav-item {
@@ -55,12 +81,9 @@
     padding: 0.75rem 1rem;
     border-radius: 8px;
     transition: all 0.3s ease;
-    font-weight: 400;
+    cursor: pointer;
 
     i {
-      display: flex;
-      align-items: center;
-      justify-content: center;
       width: 20px;
       color: #3498db;
     }
@@ -70,16 +93,39 @@
       transform: translateX(5px);
       color: #3498db;
     }
+
+    &.register {
+      background-color: #e74c3c;
+      color: white;
+      
+      i {
+        color: white;
+      }
+
+      &:hover {
+        background-color: #c0392b;
+      }
+    }
+  }
+
+  .nav-divider {
+    height: 1px;
+    background: rgba(0,0,0,0.1);
+    margin: 0.5rem 0;
   }
 }
 
+// Mobile specific adjustments
 @media (max-width: 768px) {
   .sidebar {
     width: 240px;
-    left: -240px;
     
-    &.open {
-      transform: translateX(240px);
+    &.authenticated, &.mobile-only {
+      transform: translateX(-240px);
+      
+      &.open {
+        transform: translateX(0);
+      }
     }
   }
 } 
