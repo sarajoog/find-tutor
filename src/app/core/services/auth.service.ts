@@ -1,35 +1,28 @@
 import { Injectable, computed, effect, signal } from '@angular/core';
 import { inject } from '@angular/core';
-
-
 import { 
-  getAuth, 
   signInWithEmailAndPassword,
   signOut, 
   onAuthStateChanged, 
-  updatePassword,
   UserCredential,
   User,
-  createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-  getAdditionalUserInfo,
-  deleteUser
 } from '@angular/fire/auth';
-
-import { getFirestore, doc, setDoc, addDoc, collection, updateDoc, Firestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { DatePipe } from '@angular/common';
 import { Auth } from '@angular/fire/auth';
+import { Firestore } from '@angular/fire/firestore';
+import { DatePipe } from '@angular/common';
+
 const USER_STORAGE_KEY = 'user';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class AuthService {
-
     router = inject(Router);
+    auth = inject(Auth);
+    firestore = inject(Firestore);
+    datepipe = inject(DatePipe);
+
     #userSignal = signal<User | null>(null);
     user = this.#userSignal.asReadonly();
 
@@ -38,22 +31,23 @@ export class AuthService {
 
     isLoggedIn = computed(() => !!this.user());
 
-    firestore = inject(Firestore);
-    auth      = inject(Auth);
-    datepipe = inject(DatePipe);
-
     constructor() {
-        //this.initAuth();
+        this.initAuth();
         this.loadUserFromStorage();
-
-        effect(() => {
-            const user = this.user();
-            if (user) {
-            localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
-            }
-        })
     }
 
+    private initAuth() {
+        // Listen to Firebase auth state changes
+        onAuthStateChanged(this.auth, (user) => {
+            console.log('Auth state changed:', user);
+            this.#userSignal.set(user);
+            if (user) {
+                localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
+            } else {
+                localStorage.removeItem(USER_STORAGE_KEY);
+            }
+        });
+    }
 
     public set_user_role(role: string) {
         this.#user_role.set(role);
@@ -61,19 +55,27 @@ export class AuthService {
 
     async login(email: string, password: string): Promise<UserCredential> {
         const userCredential = await signInWithEmailAndPassword(this.auth, email, password);   
-        this.#userSignal.set(userCredential.user);
+        await this.router.navigateByUrl('/account/dashboard');
         return userCredential;
     }
 
-    async loadUserFromStorage() {
-        const json = localStorage.getItem(USER_STORAGE_KEY);
-        if (json) {
-        const user = JSON.parse(json) as User;
-        this.#userSignal.set(user);
-        await this.router.navigateByUrl('/account/dashboard');
-        } else {
-        console.log(`No user found in storage.`);
+    async logout() {
+        try {
+            await signOut(this.auth);
+            this.#userSignal.set(null);
+            this.#user_role.set('');
+            localStorage.removeItem(USER_STORAGE_KEY);
+            await this.router.navigateByUrl('/auth/sign-in');
+        } catch (error) {
+            console.error('Logout error:', error);
         }
     }
 
+    private async loadUserFromStorage() {
+        const json = localStorage.getItem(USER_STORAGE_KEY);
+        if (json) {
+            const user = JSON.parse(json) as User;
+            this.#userSignal.set(user);
+        }
+    }
 }

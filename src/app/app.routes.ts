@@ -23,7 +23,7 @@ export const routes: Routes = [
         path: 'pages/about',
         loadComponent: () => 
           import('./pages/about/about.component').then(m => m.AboutComponent)
-      }
+      }   
     ]
   }
 ];
