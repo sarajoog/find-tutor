@@ -48,12 +48,24 @@ export class NavbarComponent {
     this.router.navigate(['/auth/register']);
   }
 
-  navigateToContact() {
-    this.router.navigate(['/pages/contact']);
+  navigateToTutors() {
+    this.router.navigate(['/pages/tutors']);
   }
 
-  navigateToAbout(): void {
-    this.router.navigate(['/pages/about']);
+  navigateToCourses() {
+    this.router.navigate(['/pages/courses']);
+  }
+
+  navigateToApply() {
+    this.router.navigate(['/pages/apply']);
+  }
+
+  navigateToFindTutor() {
+    this.router.navigate(['/pages/find-tutor']);
+  }
+
+  navigateToPrices() {
+    this.router.navigate(['/pages/prices']);
   }
 
   async logout() {

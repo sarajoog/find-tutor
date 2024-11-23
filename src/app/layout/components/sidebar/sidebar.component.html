@@ -1,3 +1,5 @@
+<div class="sidebar-overlay" [class.show]="isSidebarOpen()" (click)="layoutService.closeSidebar()"></div>
+
 <aside class="sidebar" [class.open]="isSidebarOpen()" [class.mobile-only]="!isLoggedIn()" [class.authenticated]="isLoggedIn()">
   <div class="sidebar-content">
     <div class="sidebar-header">
@@ -8,15 +10,29 @@
         <!-- Mobile menu for non-authenticated users -->
         @if (isMobileView()) {
           <div class="nav-section">
-            <a class="nav-item" (click)="navigateToContact()">
-              <i class="fas fa-envelope"></i>
-              <span>Contact</span>
+            <!-- Navigation Buttons -->
+            <a class="nav-item" (click)="navigateToTutors()">
+              <i class="fas fa-chalkboard-teacher"></i>
+              <span>Tutors</span>
             </a>
-            <a class="nav-item" (click)="navigateToAbout()">
-              <i class="fas fa-info-circle"></i>
-              <span>Become a Tutor</span>
+            <a class="nav-item" (click)="navigateToCourses()">
+              <i class="fas fa-book"></i>
+              <span>Courses</span>
+            </a>
+            <a class="nav-item" (click)="navigateToApply()">
+              <i class="fas fa-briefcase"></i>
+              <span>Apply</span>
+            </a>
+            <a class="nav-item" (click)="navigateToFindTutor()">
+              <i class="fas fa-search"></i>
+              <span>Find Tutor</span>
+            </a>
+            <a class="nav-item" (click)="navigateToPrices()">
+              <i class="fas fa-dollar-sign"></i>
+              <span>Prices</span>
             </a>
             <div class="nav-divider"></div>
+            <!-- Auth Buttons -->
             <a class="nav-item" (click)="navigateToSignIn()">
               <i class="fas fa-sign-in-alt"></i>
               <span>Sign In</span>

@@ -6,19 +6,35 @@
       </button>
     }
     <a class="logo" href="/">
-      <span>MyApp</span>
+      <i class="fas fa-graduation-cap logo-icon"></i>
+      <span>Find My Tutor</span>
     </a>
   </div>
   <div class="navbar-end">
     <div class="desktop-only">
-      <button class="btn btn-general-color-theme" (click)="navigateToContact()">
-        <i class="fas fa-envelope"></i>
-        Contact
+      <button class="btn btn-general-color-theme" (click)="navigateToTutors()">
+        <i class="fas fa-chalkboard-teacher"></i>
+        Tutors
       </button>
 
-      <button class="btn btn-general-color-theme" (click)="navigateToAbout()">
-        <i class="fas fa-info-circle"></i>
-        Become a Tutor
+      <button class="btn btn-general-color-theme" (click)="navigateToCourses()">
+        <i class="fas fa-book"></i>
+        Courses
+      </button>
+
+      <button class="btn btn-general-color-theme" (click)="navigateToApply()">
+        <i class="fas fa-briefcase"></i>
+        Apply
+      </button>
+
+      <button class="btn btn-general-color-theme" (click)="navigateToFindTutor()">
+        <i class="fas fa-search"></i>
+        Find Tutor
+      </button>
+
+      <button class="btn btn-general-color-theme" (click)="navigateToPrices()">
+        <i class="fas fa-dollar-sign"></i>
+        Prices
       </button>
     </div>
 

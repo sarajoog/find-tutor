@@ -1,118 +1,133 @@
 <div class="register-container">
-  <div class="register-card">
-    <h2>Create Account</h2>
-    <p class="subtitle">Join us! Please fill in your information below.</p>
+  <mat-card class="register-card">
+    <mat-card-header>
+      <mat-card-title>Create Account</mat-card-title>
+    </mat-card-header>
 
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
-      <div class="form-group">
-        <label for="fullName">Full Name</label>
-        <input 
-          type="text" 
-          id="fullName" 
-          formControlName="fullName" 
-          placeholder="Enter your full name"
-          [class.error]="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched"
-        >
-        @if (registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched) {
-          <div class="error-message">
-            @if (registerForm.get('fullName')?.errors?.['required']) {
-              <span>Full name is required</span>
-            } @else if (registerForm.get('fullName')?.errors?.['minlength']) {
-              <span>Full name must be at least 3 characters</span>
-            }
+    <mat-card-content>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+        <!-- Common Fields -->
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" placeholder="Enter your email" type="email">
+          <mat-error>{{getErrorMessage('email')}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error>{{getErrorMessage('password')}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword">
+          <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword">
+            <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error>{{getErrorMessage('confirmPassword')}}</mat-error>
+        </mat-form-field>
+
+        <!-- User Type Selection -->
+        <mat-radio-group formControlName="userType" (change)="onUserTypeChange($event.value)" class="user-type-group">
+          <mat-label>I am a:</mat-label>
+          <div class="radio-buttons">
+            <mat-radio-button value="student">Student</mat-radio-button>
+            <mat-radio-button value="tutor">Tutor</mat-radio-button>
+          </div>
+        </mat-radio-group>
+
+        <mat-divider></mat-divider>
+
+        <!-- Student Fields -->
+        @if (userType() === 'student') {
+          <div class="role-specific-fields">
+            <mat-form-field appearance="outline">
+              <mat-label>Grade Level</mat-label>
+              <mat-select formControlName="grade">
+                <mat-option value="elementary">Elementary</mat-option>
+                <mat-option value="middle">Middle School</mat-option>
+                <mat-option value="high">High School</mat-option>
+                <mat-option value="college">College</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Preferred Subject</mat-label>
+              <mat-select formControlName="subject">
+                <mat-option value="math">Mathematics</mat-option>
+                <mat-option value="science">Science</mat-option>
+                <mat-option value="english">English</mat-option>
+                <mat-option value="history">History</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Learning Style</mat-label>
+              <mat-select formControlName="learningStyle">
+                <mat-option value="visual">Visual</mat-option>
+                <mat-option value="auditory">Auditory</mat-option>
+                <mat-option value="kinesthetic">Kinesthetic</mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
         }
-      </div>
 
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input 
-          type="email" 
-          id="email" 
-          formControlName="email" 
-          placeholder="Enter your email"
-          [class.error]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
-        >
-        @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
-          <div class="error-message">
-            @if (registerForm.get('email')?.errors?.['required']) {
-              <span>Email is required</span>
-            } @else if (registerForm.get('email')?.errors?.['email']) {
-              <span>Please enter a valid email</span>
-            }
+        <!-- Tutor Fields -->
+        @if (userType() === 'tutor') {
+          <div class="role-specific-fields">
+            <mat-form-field appearance="outline">
+              <mat-label>Highest Qualification</mat-label>
+              <mat-select formControlName="qualification">
+                <mat-option value="bachelors">Bachelor's Degree</mat-option>
+                <mat-option value="masters">Master's Degree</mat-option>
+                <mat-option value="phd">PhD</mat-option>
+                <mat-option value="other">Other</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Years of Experience</mat-label>
+              <mat-select formControlName="experience">
+                <mat-option value="0-1">0-1 years</mat-option>
+                <mat-option value="1-3">1-3 years</mat-option>
+                <mat-option value="3-5">3-5 years</mat-option>
+                <mat-option value="5+">5+ years</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Specialization</mat-label>
+              <mat-select formControlName="specialization">
+                <mat-option value="math">Mathematics</mat-option>
+                <mat-option value="science">Science</mat-option>
+                <mat-option value="english">English</mat-option>
+                <mat-option value="history">History</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Availability</mat-label>
+              <mat-select formControlName="availability">
+                <mat-option value="weekdays">Weekdays</mat-option>
+                <mat-option value="weekends">Weekends</mat-option>
+                <mat-option value="both">Both</mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
         }
-      </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input 
-          type="password" 
-          id="password" 
-          formControlName="password" 
-          placeholder="Enter your password"
-          [class.error]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-        >
-        @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
-          <div class="error-message">
-            @if (registerForm.get('password')?.errors?.['required']) {
-              <span>Password is required</span>
-            } @else if (registerForm.get('password')?.errors?.['minlength']) {
-              <span>Password must be at least 6 characters</span>
-            }
-          </div>
-        }
-      </div>
-
-      <div class="form-group">
-        <label for="confirmPassword">Confirm Password</label>
-        <input 
-          type="password" 
-          id="confirmPassword" 
-          formControlName="confirmPassword" 
-          placeholder="Confirm your password"
-          [class.error]="(registerForm.get('confirmPassword')?.invalid || registerForm.errors?.['mismatch']) && registerForm.get('confirmPassword')?.touched"
-        >
-        @if ((registerForm.get('confirmPassword')?.invalid || registerForm.errors?.['mismatch']) && registerForm.get('confirmPassword')?.touched) {
-          <div class="error-message">
-            @if (registerForm.get('confirmPassword')?.errors?.['required']) {
-              <span>Please confirm your password</span>
-            } @else if (registerForm.errors?.['mismatch']) {
-              <span>Passwords do not match</span>
-            }
-          </div>
-        }
-      </div>
-
-      <div class="form-group checkbox">
-        <label>
-          <input type="checkbox" formControlName="acceptTerms">
-          I accept the <a href="/terms" class="terms-link">Terms & Conditions</a>
-        </label>
-        @if (registerForm.get('acceptTerms')?.invalid && registerForm.get('acceptTerms')?.touched) {
-          <div class="error-message">
-            <span>You must accept the Terms & Conditions</span>
-          </div>
-        }
-      </div>
-
-      <button 
-        type="submit" 
-        class="submit-btn" 
-        [disabled]="registerForm.invalid || isSubmitting"
-      >
-        @if (isSubmitting) {
-          <i class="fas fa-spinner fa-spin"></i>
-          Creating Account...
-        } @else {
+        <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid">
           Create Account
-        }
-      </button>
-    </form>
+        </button>
 
-    <div class="sign-in-prompt">
-      <span>Already have an account?</span>
-      <a routerLink="/auth/sign-in">Sign In</a>
-    </div>
-  </div>
+        <div class="login-link">
+          Already have an account? <a routerLink="/auth/sign-in">Sign In</a>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div> 

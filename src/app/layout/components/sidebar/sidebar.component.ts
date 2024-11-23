@@ -1,4 +1,4 @@
-import { Component, inject, effect } from '@angular/core';
+import { Component, inject, effect, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { LayoutService } from '../../services/layout.service';
@@ -11,8 +11,8 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent {
-  private layoutService = inject(LayoutService);
+export class SidebarComponent implements OnInit, AfterViewInit {
+  public layoutService = inject(LayoutService);
   private authService = inject(AuthService);
   private router = inject(Router);
   private mobileBreakpoint = 768;
@@ -35,6 +35,29 @@ export class SidebarComponent {
     });
   }
 
+  ngOnInit() {
+    this.setFooterHeight();
+    window.addEventListener('resize', () => this.setFooterHeight());
+  }
+
+  ngAfterViewInit() {
+    this.setFooterHeight();
+    window.addEventListener('resize', () => this.setFooterHeight());
+  }
+
+  private setFooterHeight() {
+    const footer = document.querySelector('footer');
+    if (footer) {
+      const footerHeight = footer.offsetHeight;
+      document.documentElement.style.setProperty('--footer-height', `${footerHeight}px`);
+      document.documentElement.style.setProperty('--footer-height-mobile', `${footerHeight}px`);
+    }
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('resize', () => this.setFooterHeight());
+  }
+
   // Navigation methods
   navigateToSignIn() {
     this.router.navigate(['/auth/sign-in']);
@@ -43,6 +66,31 @@ export class SidebarComponent {
 
   navigateToRegister() {
     this.router.navigate(['/auth/register']);
+    this.layoutService.closeSidebar();
+  }
+
+  navigateToTutors() {
+    this.router.navigate(['/pages/tutors']);
+    this.layoutService.closeSidebar();
+  }
+
+  navigateToCourses() {
+    this.router.navigate(['/pages/courses']);
+    this.layoutService.closeSidebar();
+  }
+
+  navigateToApply() {
+    this.router.navigate(['/pages/apply']);
+    this.layoutService.closeSidebar();
+  }
+
+  navigateToFindTutor() {
+    this.router.navigate(['/pages/find-tutor']);
+    this.layoutService.closeSidebar();
+  }
+
+  navigateToPrices() {
+    this.router.navigate(['/pages/prices']);
     this.layoutService.closeSidebar();
   }
 
