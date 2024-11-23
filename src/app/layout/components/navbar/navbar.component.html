@@ -1,8 +1,8 @@
 <nav class="navbar">
   <div class="navbar-start">
     @if (isMobileView() || isLoggedIn()) {
-      <button class="menu-button" (click)="toggleSidebar()">
-        <i class="fas fa-bars"></i>
+      <button mat-icon-button class="menu-button" (click)="toggleSidebar()">
+        <mat-icon>menu</mat-icon>
       </button>
     }
     <a class="logo" href="/">
@@ -12,27 +12,27 @@
   </div>
   <div class="navbar-end">
     <div class="desktop-only">
-      <button class="btn btn-general-color-theme" (click)="navigateToTutors()">
+      <button mat-raised-button color="primary" (click)="navigateToTutors()">
         <i class="fas fa-chalkboard-teacher"></i>
         Tutors
       </button>
 
-      <button class="btn btn-general-color-theme" (click)="navigateToCourses()">
+      <button mat-raised-button color="primary" (click)="navigateToCourses()">
         <i class="fas fa-book"></i>
         Courses
       </button>
 
-      <button class="btn btn-general-color-theme" (click)="navigateToApply()">
+      <button mat-raised-button color="primary" (click)="navigateToApply()">
         <i class="fas fa-briefcase"></i>
         Apply
       </button>
 
-      <button class="btn btn-general-color-theme" (click)="navigateToFindTutor()">
+      <button mat-raised-button color="primary" (click)="navigateToFindTutor()">
         <i class="fas fa-search"></i>
         Find Tutor
       </button>
 
-      <button class="btn btn-general-color-theme" (click)="navigateToPrices()">
+      <button mat-raised-button color="primary" (click)="navigateToPrices()">
         <i class="fas fa-dollar-sign"></i>
         Prices
       </button>
@@ -40,18 +40,18 @@
 
     @if (!isLoggedIn()) {
       <div class="desktop-only">
-        <button class="btn btn-general-color-theme" (click)="navigateToSignIn()">
+        <button mat-raised-button color="primary" (click)="navigateToSignIn()">
           <i class="fas fa-sign-in-alt"></i>
           Sign In
         </button>
         
-        <button class="btn btn-register" (click)="navigateToRegister()">
+        <button mat-raised-button color="warn" (click)="navigateToRegister()">
           <i class="fas fa-user-plus"></i>
           Register
         </button>
       </div>
     } @else {
-      <button class="btn btn-general-color-theme" (click)="logout()">
+      <button mat-raised-button color="warn" (click)="logout()">
         <i class="fas fa-sign-out-alt"></i>
         Logout
       </button>

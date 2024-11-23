@@ -58,17 +58,23 @@ import { LayoutService } from '../../services/layout.service';
     </div>
   `,
   styles: [`
+    :host {
+      display: block;
+      background-color: white;
+    }
+
     .page-container {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      transition: all 0.3s ease;
+      background-color: white;
     }
 
     .content-container {
       display: flex;
       flex: 1;
-      margin-top: 64px;
+      margin-top: 100px; // Account for top-bar + navbar
+      background-color: white;
     }
 
     .main-and-footer {
@@ -76,6 +82,7 @@ import { LayoutService } from '../../services/layout.service';
       display: flex;
       flex-direction: column;
       transition: margin-left 0.3s ease;
+      background-color: white;
     }
 
     .page-container.sidebar-open .main-and-footer {
@@ -90,27 +97,32 @@ import { LayoutService } from '../../services/layout.service';
     .main-content {
       flex: 1;
       padding: 2rem;
-      min-height: calc(100vh - 64px - 300px);
+      min-height: calc(100vh - 100px - 300px);
+      background-color: white;
     }
 
     .footer {
-      background: #2c3e50;
+      background: #1a237e; // Deep blue background
       color: white;
       padding: 3rem 2rem;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 2rem;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
 
       h3 {
         margin-bottom: 1rem;
         font-size: 1.2rem;
+        color: #64b5f6; // Light blue for headers
       }
 
       a {
-        color: white;
+        color: #bbdefb; // Lighter blue for links
         text-decoration: none;
+        transition: color 0.3s ease;
+        
         &:hover {
-          color: #3498db;
+          color: white;
         }
       }
 
@@ -121,6 +133,11 @@ import { LayoutService } from '../../services/layout.service';
         
         a {
           font-size: 1.5rem;
+          color: #64b5f6;
+          
+          &:hover {
+            color: white;
+          }
         }
       }
 
@@ -138,22 +155,29 @@ import { LayoutService } from '../../services/layout.service';
         margin-top: 1rem;
 
         input {
-          padding: 0.5rem;
+          padding: 0.75rem;
           border: none;
           border-radius: 4px;
           flex: 1;
+          background: rgba(255,255,255,0.1);
+          color: white;
+          
+          &::placeholder {
+            color: rgba(255,255,255,0.7);
+          }
         }
 
         button {
-          padding: 0.5rem 1rem;
-          background: #3498db;
+          padding: 0.75rem 1.5rem;
+          background: #2196f3;
           border: none;
           border-radius: 4px;
           color: white;
           cursor: pointer;
+          transition: background 0.3s ease;
 
           &:hover {
-            background: #2980b9;
+            background: #1976d2;
           }
         }
       }
