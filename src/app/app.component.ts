@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router } from '@angular/router';
 import { NavbarComponent } from './layout/components/navbar/navbar.component';
 import { SidebarComponent } from './layout/components/sidebar/sidebar.component';
 import { FooterComponent } from './layout/components/footer/footer.component';
@@ -16,5 +16,11 @@ import { TopBarComponent } from './layout/components/top-bar/top-bar.component';
 })
 export class AppComponent {
   private layoutService = inject(LayoutService);
-  readonly isSidebarOpen = this.layoutService.isSidebarOpen;
+  private router = inject(Router);
+  
+  isSidebarOpen = this.layoutService.isSidebarOpen;
+
+  shouldShowAppContent(): boolean {
+    return this.router.url === '/';
+  }
 }

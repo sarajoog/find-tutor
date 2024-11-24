@@ -3,6 +3,10 @@
   <app-navbar />
   <app-sidebar />
   <main class="main-content">  
+    <div class="app-specific-content" *ngIf="shouldShowAppContent()">
+      <h1>Welcome to Our Platform</h1>
+      <p>Find the best tutors and courses</p>
+    </div>
     <router-outlet />
   </main>
   <app-footer />

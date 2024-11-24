@@ -1,0 +1,18 @@
+.tutors-container {
+  padding: 20px;
+}
+
+.tutors-header {
+  margin-bottom: 24px;
+}
+
+.tutors-content {
+  margin-top: 20px;
+}
+
+.tutors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
