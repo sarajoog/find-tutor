@@ -1,4 +1,4 @@
-import { Injectable, signal, inject, effect } from '@angular/core';
+import { Injectable, signal, inject, effect, DestroyRef } from '@angular/core';
 import { MenuItem } from '../models/menu.model';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -9,6 +9,7 @@ import { AuthService } from '../../core/services/auth.service';
 
 export class LayoutService {
   private authService = inject(AuthService);
+  private destroyRef = inject(DestroyRef);
   private sidebarOpen = signal<boolean>(false);
   private menuItems = signal<MenuItem[]>([
     { title: 'Dashboard', link: '/dashboard', icon: 'fas fa-home' },
@@ -22,37 +23,54 @@ export class LayoutService {
   readonly isSidebarOpen = this.sidebarOpen.asReadonly();
   readonly getMenuItems = this.menuItems.asReadonly();
 
-  constructor() {
-    effect(() => {
-      if (this.authService.isLoggedIn() && window.innerWidth > 768) {
-        this.sidebarOpen.set(true);
-      } else {
-        this.sidebarOpen.set(false);
-      }
-    });
-
-    window.addEventListener('resize', () => {
+  private handleResize = () => {
+    queueMicrotask(() => {
       if (window.innerWidth <= 768) {
         this.sidebarOpen.set(false);
       } else if (this.authService.isLoggedIn()) {
         this.sidebarOpen.set(true);
       }
     });
+  };
+
+  constructor() {
+    // Initial sidebar state
+    const initEffect = effect(() => {
+      queueMicrotask(() => {
+        if (this.authService.isLoggedIn() && window.innerWidth > 768) {
+          this.sidebarOpen.set(true);
+        } else {
+          this.sidebarOpen.set(false);
+        }
+      });
+    }, { allowSignalWrites: true });
+
+    // Cleanup effect on destroy
+    this.destroyRef.onDestroy(() => {
+      initEffect.destroy();
+    });
+
+    window.addEventListener('resize', this.handleResize);
+    this.destroyRef.onDestroy(() => {
+      window.removeEventListener('resize', this.handleResize);
+    });
   }
 
   toggleSidebar() {
-    this.sidebarOpen.update(state => !state);
+    queueMicrotask(() => {
+      this.sidebarOpen.update(state => !state);
+    });
   }
 
   closeSidebar() {
-    this.sidebarOpen.set(false);
+    queueMicrotask(() => {
+      this.sidebarOpen.set(false);
+    });
   }
 
   openSidebar() {
-    this.sidebarOpen.set(true);
-  }
-
-  ngOnDestroy() {
-    window.removeEventListener('resize', () => {});
+    queueMicrotask(() => {
+      this.sidebarOpen.set(true);
+    });
   }
 } 

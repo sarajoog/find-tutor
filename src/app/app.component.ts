@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router } from '@angular/router';
 import { NavbarComponent } from './layout/components/navbar/navbar.component';
@@ -18,7 +18,7 @@ export class AppComponent {
   private layoutService = inject(LayoutService);
   private router = inject(Router);
   
-  isSidebarOpen = this.layoutService.isSidebarOpen;
+  sidebarOpen = this.layoutService.isSidebarOpen;
 
   shouldShowAppContent(): boolean {
     return this.router.url === '/';
