@@ -32,3 +32,63 @@ p {
 input, textarea {
   font-family: 'Roboto', sans-serif;
 }
+
+// Material Button Styles
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-stroked-button,
+.mat-mdc-flat-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+  }
+}
+
+// Specific button type styles
+.mat-mdc-raised-button {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16) !important;
+  
+  &:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.22) !important;
+  }
+}
+
+.mat-mdc-stroked-button {
+  border: 2px solid currentColor !important;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}
+
+// Primary button specific styles
+.mat-mdc-raised-button.mat-primary {
+  box-shadow: 0 3px 6px rgba(33, 150, 243, 0.3) !important;
+  
+  &:hover {
+    box-shadow: 0 6px 12px rgba(33, 150, 243, 0.4) !important;
+  }
+}
+
+// Accent button specific styles
+.mat-mdc-raised-button.mat-accent {
+  box-shadow: 0 3px 6px rgba(255, 64, 129, 0.3) !important;
+  
+  &:hover {
+    box-shadow: 0 6px 12px rgba(255, 64, 129, 0.4) !important;
+  }
+}
+
+// Ripple effect customization
+.mat-ripple-element {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  opacity: 0.4;
+}
